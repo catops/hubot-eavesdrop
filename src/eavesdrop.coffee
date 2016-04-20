@@ -30,10 +30,16 @@ class EavesDropping
     task = {key: pattern, task: action, order: order}
     @eavesdroppings.push task
   all: -> @eavesdroppings
-  deleteByPattern: (pattern) ->
-    @eavesdroppings = @eavesdroppings.filter (n) -> n.key != pattern
+  deleteByPattern: (pattern, msg) ->
+    filtered = @eavesdroppings.filter (n) -> n.key != pattern
+    if @eavesdroppings.length == filtered.length
+      return msg.send "I'm not listening for #{pattern}."
+    @eavesdroppings = filtered
+    @robot.brain.set 'eavesdroppings', @eavesdroppings
+    msg.send "Okay, I will ignore #{pattern}."
   deleteAll: () ->
     @eavesdroppings = []
+    @robot.brain.set 'eavesdroppings', @eavesdroppings
 
 module.exports = (robot) ->
   eavesDropper = new EavesDropping robot
@@ -49,13 +55,18 @@ module.exports = (robot) ->
         eavesDropper.add(key, task_split[1], task_split[0])
     msg.send "I am now listening for #{key}."
 
-  robot.respond /stop listening (for|on) (.+?)$/i, (msg) ->
-    pattern = msg.match[2]
-    eavesDropper.deleteByPattern(pattern)
-    msg.send "Okay, I will ignore #{pattern}"
+  robot.respond /stop (listening|eavesdropping)$/i, (msg) ->
+    eavesDropper.deleteAll()
+    msg.send 'Okay, I will no longer listen for anything.'
+
+  robot.respond /stop (listening|eavesdropping) (for|on) (.+?)$/i, (msg) ->
+    pattern = msg.match[3]
+    eavesDropper.deleteByPattern(pattern, msg)
 
   robot.respond /show (listening|eavesdropping)s?/i, (msg) ->
     response = "\n"
+    if eavesDropper.all().length < 1
+      return msg.send "I'm not listening for anything."
     for task in eavesDropper.all()
       response += "#{task.key} -> #{task.task}\n"
     if response.length < 1000

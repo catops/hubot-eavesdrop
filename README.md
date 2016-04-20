@@ -22,6 +22,19 @@ Then add **hubot-eavesdrop** to your `external-scripts.json`:
 user1>> hubot when you hear slow clap do echo http://i.imgur.com/0mKXcg1.gif
 user1>> slow clap
 hubot>> http://i.imgur.com/0mKXcg1.gif
+
+user1>> hubot stop listening for slow clap
+hubot>> Okay, I will ignore slow clap.
+```
+
+Also supports regular expressions.
+
+```
+user1>> hubot when you hear slow\s?clap(ping)? do echo http://i.imgur.com/0mKXcg1.gif
+user1>> slow clapping
+hubot>> http://i.imgur.com/0mKXcg1.gif
+user1>> slowclap
+hubot>> http://i.imgur.com/0mKXcg1.gif
 ```
 
 ----
