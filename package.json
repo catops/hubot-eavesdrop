@@ -1,7 +1,7 @@
 {
   "name": "hubot-eavesdrop",
   "description": "A hubot script to perform actions when user-specified keywords are mentioned.",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "Chris Contolini <contolini@users.noreply.github.com>",
   "license": "CC0-1.0",
   "keywords": [
@@ -11,10 +11,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/contolini/hubot-eavesdrop.git"
+    "url": "git://github.com/cfpb/hubot-eavesdrop.git"
   },
   "bugs": {
-    "url": "https://github.com/contolini/hubot-eavesdrop/issues"
+    "url": "https://github.com/cfpb/hubot-eavesdrop/issues"
   },
   "dependencies": {
     "coffee-script": "1.10.0",
