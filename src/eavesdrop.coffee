@@ -5,11 +5,11 @@
 #   quick-gist: 1.2.0
 #
 # Configuration:
-#   None
+#   HUBOT_EAVESDROP_DELAY: Seconds to wait before an event can be triggered a second time. Default is 30.
 #
 # Commands:
 #   hubot when you hear <pattern> do <something hubot does> - Setup a eavesdropping event
-#   hubot stop listening - Stop all eavesdropping
+#   hubot stop listening - Stop all eavesdropping (requires user to be an 'admin')
 #   hubot stop listening for <pattern> - Remove a particular eavesdropping event
 #   hubot show listening - Show what hubot is eavesdropping on
 #
@@ -23,11 +23,14 @@ TextMessage = require('hubot').TextMessage
 
 class EavesDropping
   constructor: (@robot) ->
+    @delay = process.env.HUBOT_EAVESDROP_DELAY || 30
+    @recentEvents = {}
+
     eavesdroppings = @robot.brain.get 'eavesdroppings'
     @eavesdroppings = eavesdroppings or []
     @robot.brain.set 'eavesdroppings', @eavesdroppings
-  add: (pattern, action, order) ->
-    task = {key: pattern, task: action, order: order}
+  add: (pattern, user, action, order) ->
+    task = {key: pattern, task: action, order: order, creator: user}
     @eavesdroppings.push task
   all: -> @eavesdroppings
   deleteByPattern: (pattern, msg) ->
@@ -50,14 +53,17 @@ module.exports = (robot) ->
       task_split = task_raw.split "|"
       # If it's a single task, don't add an "order" property
       if not task_split[1]
-        eavesDropper.add(key, task_split[0])
+        eavesDropper.add(key, msg.envelope.user.name, task_split[0])
       else
-        eavesDropper.add(key, task_split[1], task_split[0])
+        eavesDropper.add(key, msg.envelope.user.name, task_split[0], task_split[1])
     msg.send "I am now listening for #{key}."
 
   robot.respond /stop (listening|eavesdropping)$/i, (msg) ->
-    eavesDropper.deleteAll()
-    msg.send 'Okay, I will no longer listen for anything.'
+    if robot.auth.hasRole msg.envelope.user, 'admin'
+      eavesDropper.deleteAll()
+      msg.send 'Okay, I will no longer listen for anything.'
+    else
+      msg.send 'Sorry, only admins can delete all eavesdroppings.'
 
   robot.respond /stop (listening|eavesdropping) (for|on) (.+?)$/i, (msg) ->
     pattern = msg.match[3]
@@ -90,7 +96,11 @@ module.exports = (robot) ->
 
     tasksToRun.sort (a,b) ->
       return if a.order >= b.order then 1 else -1
-
+    console.log eavesDropper.recentEvents
     for task in tasksToRun
       if (robot.name != msg.message.user.name && !(new RegExp("^#{robot.name}", "i").test(robotHeard)))
-        robot.receive new TextMessage(msg.message.user, "#{robot.name}: #{task.task}")
+        now = Date.now()
+        lastTime = eavesDropper.recentEvents[task.key]
+        if !lastTime or (now - lastTime) / 1000 > eavesDropper.delay
+          robot.receive new TextMessage(msg.message.user, "#{robot.name}: #{task.task}")
+        eavesDropper.recentEvents[task.key] = now

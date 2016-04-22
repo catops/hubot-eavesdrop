@@ -37,6 +37,18 @@ user1>> slowclap
 hubot>> http://i.imgur.com/0mKXcg1.gif
 ```
 
+Multiple actions can be specified for a single keyword.
+
+```
+user1>> hubot when you hear slow clap do 1|echo congrats!; 2|echo http://i.imgur.com/0mKXcg1.gif
+user1>> slow clap
+hubot>> congrats!
+hubot>> http://i.imgur.com/0mKXcg1.gif
+```
+
+To reduce channel noise, keywords only trigger events once every thirty seconds.
+The length of this delay can be changed by setting a `HUBOT_EAVESDROP_DELAY` environment variable.
+
 ----
 
 ## Open source licensing info
