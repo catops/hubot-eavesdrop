@@ -96,7 +96,7 @@ module.exports = (robot) ->
 
     tasksToRun.sort (a,b) ->
       return if a.order >= b.order then 1 else -1
-    console.log eavesDropper.recentEvents
+
     for task in tasksToRun
       if (robot.name != msg.message.user.name && !(new RegExp("^#{robot.name}", "i").test(robotHeard)))
         now = Date.now()
