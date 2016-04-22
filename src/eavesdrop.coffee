@@ -74,7 +74,7 @@ module.exports = (robot) ->
     if eavesDropper.all().length < 1
       return msg.send "I'm not listening for anything."
     for task in eavesDropper.all()
-      response += "#{task.key} -> #{task.task}\n"
+      response += "#{task.key} -> #{task.task} (#{task.creator})\n"
     if response.length < 1000
       msg.send response
     else
