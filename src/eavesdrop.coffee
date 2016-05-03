@@ -98,9 +98,9 @@ module.exports = (robot) ->
       return if a.order >= b.order then 1 else -1
 
     for task in tasksToRun
-      if (robot.name != msg.message.user.name && !(new RegExp("^#{robot.name}", "i").test(robotHeard)))
+      if robot.name != msg.message.user.name
         now = Date.now()
         lastTime = eavesDropper.recentEvents[task.key]
-        if !lastTime or (now - lastTime) / 1000 > eavesDropper.delay
+        if msg.message.user.name == task.creator or new RegExp("^#{robot.name}", "i").test(robotHeard) or !lastTime or (now - lastTime) / 1000 > eavesDropper.delay
           robot.receive new TextMessage(msg.message.user, "#{robot.name}: #{task.task}")
         eavesDropper.recentEvents[task.key] = now
