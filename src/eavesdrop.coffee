@@ -85,6 +85,11 @@ module.exports = (robot) ->
   robot.hear /(.+)/i, (msg) ->
     robotHeard = msg.match[1]
 
+    # To play nicely with adapters that spoof the bot's name in DMs, don't respond
+    # if the message starts with "hubot:" or "hubot when you hear"
+    if new RegExp("^#{robot.name}\:", "i").test(robotHeard) or new RegExp("^(#{robot.name} )?when you hear", "i").test(robotHeard)
+      return
+
     tasks = eavesDropper.all()
     tasks.sort (a,b) ->
       return if a.order >= b.order then 1 else -1
@@ -101,6 +106,6 @@ module.exports = (robot) ->
       if robot.name != msg.message.user.name
         now = Date.now()
         lastTime = eavesDropper.recentEvents[task.key]
-        if msg.message.user.name == task.creator or new RegExp("^#{robot.name}", "i").test(robotHeard) or !lastTime or (now - lastTime) / 1000 > eavesDropper.delay
+        if msg.message.user.name == task.creator or !lastTime or (now - lastTime) / 1000 > eavesDropper.delay
           robot.receive new TextMessage(msg.message.user, "#{robot.name}: #{task.task}")
         eavesDropper.recentEvents[task.key] = now
