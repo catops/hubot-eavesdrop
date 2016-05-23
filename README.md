@@ -1,6 +1,6 @@
 # hubot-eavesdrop [![Build Status](https://img.shields.io/travis/catops/hubot-eavesdrop.svg?maxAge=2592000&style=flat-square)](https://travis-ci.org/catops/hubot-eavesdrop.svg?branch=master) [![npm](https://img.shields.io/npm/v/hubot-eavesdrop.svg?maxAge=2592000&style=flat-square)](https://www.npmjs.com/package/hubot-eavesdrop)
 
-A hubot script to perform actions when user-specified keywords are mentioned. Based on [eardropping.coffee](https://github.com/github/hubot-scripts/blob/master/src/scripts/eardropping.coffee).
+A hubot script to have your bot respond to specified keywords.
 
 See [`src/eavesdrop.coffee`](src/eavesdrop.coffee) for full documentation.
 
@@ -21,7 +21,7 @@ Then add **hubot-eavesdrop** to your `external-scripts.json`:
 ## Sample Interaction
 
 ```
-user1>> hubot when you hear slow clap do echo http://i.imgur.com/0mKXcg1.gif
+user1>> hubot when you hear slow clap respond with http://i.imgur.com/0mKXcg1.gif
 user1>> slow clap
 hubot>> http://i.imgur.com/0mKXcg1.gif
 
@@ -32,17 +32,17 @@ hubot>> Okay, I will ignore slow clap.
 Also supports regular expressions.
 
 ```
-user1>> hubot when you hear slow\s?clap(ping)? do echo http://i.imgur.com/0mKXcg1.gif
+user1>> hubot when you hear slow\s?clap(ping)? respond with http://i.imgur.com/0mKXcg1.gif
 user1>> slow clapping
 hubot>> http://i.imgur.com/0mKXcg1.gif
 user1>> slowclap
 hubot>> http://i.imgur.com/0mKXcg1.gif
 ```
 
-Multiple actions can be specified for a single keyword.
+Multiple responses can be specified for a single keyword.
 
 ```
-user1>> hubot when you hear slow clap do 1|echo congrats!; 2|echo http://i.imgur.com/0mKXcg1.gif
+user1>> hubot when you hear slow clap respond with 1|congrats!; 2|http://i.imgur.com/0mKXcg1.gif
 user1>> slow clap
 hubot>> congrats!
 hubot>> http://i.imgur.com/0mKXcg1.gif

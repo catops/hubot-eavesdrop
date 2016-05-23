@@ -51,7 +51,10 @@ class EavesDropping
 module.exports = (robot) ->
   eavesDropper = new EavesDropping robot
 
-  robot.respond /when you hear (.+?) do (.+?)$/i, (msg) ->
+  robot.respond /when you hear (.+?) do echo (.+?)$/i, (msg) ->
+    msg.reply "Please use the new format: \"#{robot.name} when you hear [phrase] respond with [reponse]\""
+
+  robot.respond /when you hear (.+?) respond with (.+?)$/i, (msg) ->
     key = msg.match[1]
     for task_raw in msg.match[2].split ";"
       task_split = task_raw.split "|"
@@ -111,5 +114,5 @@ module.exports = (robot) ->
         now = Date.now()
         lastTime = eavesDropper.recentEvents[task.key]
         if msg.message.user.name == task.creator or !lastTime or (now - lastTime) / 1000 > eavesDropper.delay
-          robot.receive new TextMessage(msg.message.user, "#{robot.name}: #{task.task}")
+          robot.messageRoom msg.room, task.task
         eavesDropper.recentEvents[task.key] = now
