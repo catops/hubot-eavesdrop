@@ -8,7 +8,7 @@
 #   HUBOT_EAVESDROP_DELAY: Seconds to wait before an event can be triggered a second time. Default is 30.
 #
 # Commands:
-#   hubot when you hear <pattern> do <something hubot does> - Setup a eavesdropping event
+#   hubot when you hear <pattern> respond with <response> - Setup a eavesdropping event
 #   hubot stop listening - Stop all eavesdropping (requires user to be an 'admin')
 #   hubot stop listening for <pattern> - Remove a particular eavesdropping event
 #   hubot show listening - Show what hubot is eavesdropping on
@@ -19,7 +19,6 @@
 #   inhumantsar
 
 gist = require 'quick-gist'
-TextMessage = require('hubot').TextMessage
 
 class EavesDropping
   constructor: (@robot) ->
