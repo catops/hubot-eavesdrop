@@ -1,7 +1,7 @@
 {
   "name": "hubot-eavesdrop",
   "description": "A hubot script to perform actions when user-specified keywords are mentioned.",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "author": "Chris Contolini <contolini@users.noreply.github.com>",
   "license": "CC0-1.0",
   "keywords": [
