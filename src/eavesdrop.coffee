@@ -25,10 +25,14 @@ class EavesDropping
   constructor: (@robot) ->
     @delay = process.env.HUBOT_EAVESDROP_DELAY || 30
     @recentEvents = {}
+    initialized = false
+    robot.brain.on 'loaded', =>
+      return if initialized
+      initialized = true
+      eavesdroppings = @robot.brain.get 'eavesdroppings'
+      @eavesdroppings = eavesdroppings or []
+      @robot.brain.set 'eavesdroppings', @eavesdroppings
 
-    eavesdroppings = @robot.brain.get 'eavesdroppings'
-    @eavesdroppings = eavesdroppings or []
-    @robot.brain.set 'eavesdroppings', @eavesdroppings
   add: (pattern, user, action, order) ->
     task = {key: pattern, task: action, order: order, creator: user}
     @eavesdroppings.push task
