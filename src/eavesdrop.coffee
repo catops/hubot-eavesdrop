@@ -113,5 +113,5 @@ module.exports = (robot) ->
         now = Date.now()
         lastTime = eavesDropper.recentEvents[task.key]
         if msg.message.user.name == task.creator or !lastTime or (now - lastTime) / 1000 > eavesDropper.delay
-          robot.messageRoom msg.room, task.task
+          robot.messageRoom msg.envelope.room, task.task
         eavesDropper.recentEvents[task.key] = now
