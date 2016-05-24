@@ -53,9 +53,9 @@ module.exports = (robot) ->
   robot.respond /when you hear (.+?) do echo (.+?)$/i, (msg) ->
     msg.reply "Please use the new format: \"#{robot.name} when you hear [phrase] respond with [reponse]\""
 
-  robot.respond /when you hear (.+?) respond with (.+?)$/i, (msg) ->
+  robot.respond /when you hear (.+?) (respond|reply) with (.+?)$/i, (msg) ->
     key = msg.match[1]
-    for task_raw in msg.match[2].split ";"
+    for task_raw in msg.match[3].split ";"
       task_split = task_raw.split "|"
       # If it's a single task, don't add an "order" property
       if not task_split[1]
