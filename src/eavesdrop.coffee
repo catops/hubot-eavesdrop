@@ -24,8 +24,9 @@ class EavesDropping
   constructor: (@robot) ->
     @delay = process.env.HUBOT_EAVESDROP_DELAY || 30
     @recentEvents = {}
+    @eavesdroppings = []
     initialized = false
-    robot.brain.on 'loaded', =>
+    @robot.brain.on 'loaded', =>
       return if initialized
       initialized = true
       eavesdroppings = @robot.brain.get 'eavesdroppings'
