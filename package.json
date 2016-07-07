@@ -28,7 +28,7 @@
     "grunt-release": "~0.13.0",
     "matchdep": "~1.0.1",
     "mocha": "*",
-    "sinon": "*",
+    "sinon": "1.17.4",
     "sinon-chai": "*"
   },
   "main": "index.coffee",
