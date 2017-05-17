@@ -70,7 +70,7 @@ module.exports = (robot) ->
     pattern = msg.match[3]
     eavesDropper.deleteByPattern(pattern, msg)
 
-  robot.respond /show (listening|eavesdropping)s?/i, (msg) ->
+  robot.respond /show (listening|listener|listeners|eavesdropping)s?/i, (msg) ->
     response = "\n"
     if eavesDropper.all().length < 1
       return msg.send "I'm not listening for anything."
