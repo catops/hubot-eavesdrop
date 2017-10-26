@@ -26,10 +26,11 @@ class EavesDropping
     @recentEvents = {}
   add: (pattern, user, action, order) ->
     task = {key: pattern, task: action, order: order, creator: user}
-    @eavesdroppings = @eavesdroppings or @robot.brain.get 'eavesdroppings'
+    @eavesdroppings = @eavesdroppings or @robot.brain.get('eavesdroppings') or []
     @eavesdroppings.push task
+    @robot.brain.set 'eavesdroppings', @eavesdroppings
   all: ->
-    @eavesdroppings or @robot.brain.get 'eavesdroppings'
+    @eavesdroppings or @robot.brain.get('eavesdroppings') or []
   deleteByPattern: (pattern, msg) ->
     @eavesdroppings = @eavesdroppings or @robot.brain.get 'eavesdroppings'
     filtered = @eavesdroppings.filter (n) -> n.key != pattern
